@@ -22,9 +22,5 @@ class TextNode():
         return is_eq_txt and is_eq_tt and is_eq_url
 
     def __repr__(tn):
-        return f"TextNode({tn.text}, {tn.text_type.value}, {tn.url}"
-
-
-
-
+        return f"TextNode({tn.text}, {tn.text_type.value}, {tn.url})"
 
