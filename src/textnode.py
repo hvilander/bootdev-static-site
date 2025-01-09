@@ -2,7 +2,7 @@ from enum import Enum
 from leafnode import LeafNode
 
 class TextType(Enum):
-    NORMAL = "Normal text"
+    TEXT = "Normal text"
     BOLD = "Bold text"
     ITALIC = "Italic text"
     CODE = "mono spaced"
@@ -32,7 +32,7 @@ class TextNode():
         props = None
 
         match type:
-            case TextType.NORMAL:
+            case TextType.TEXT:
                 tag = None
             case TextType.BOLD:
                 tag = "b"

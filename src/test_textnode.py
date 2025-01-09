@@ -26,7 +26,7 @@ class TestTextNode(unittest.TestCase):
 
 
     def test_to_leaf_node_text(self):
-        t_node = TextNode("plain text", TextType.NORMAL)
+        t_node = TextNode("plain text", TextType.TEXT)
         expect = HTMLNode(None, "plain text")
         self.assertEqual(expect, t_node.to_html_node())
 

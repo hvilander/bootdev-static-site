@@ -7,7 +7,6 @@ class TestHTMLNode(unittest.TestCase):
         htmlNode = HTMLNode("tag", "my value")
         expected = " HTMLNode(tag, my value, None, None)"
         strn = f" {htmlNode}"
-        print(strn + "!")
 
         self.assertEqual(strn, expected)
 
