@@ -1,4 +1,5 @@
 from textnode import TextType, TextNode
+import re
 
 def text_type_by_delim(delim):
     match delim:
@@ -37,9 +38,6 @@ def split_text_node(old_text_node, delimiter):
         new_lst.append(TextNode(lst[2], TextType.TEXT))
 
     return new_lst
-    
-
-
 
 
 # list of old nodes
@@ -60,3 +58,67 @@ def split_nodes_delim(old_nodes, delimiter, text_type):
 
     
     return new_list
+
+# images
+img_regex = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+# raw text -> list of tuples
+def extract_md_images(text):
+    matches = re.findall(img_regex, text)
+    return matches
+
+
+# regular links
+link_regex = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+def extract_md_links(text):
+    matches = re.findall(link_regex, text)
+    return matches
+
+def split_nodes_link(old_nodes):
+    new_nodes = []
+    for n in old_nodes:
+        matches = extract_md_links(n.text)
+        if len(matches) == 0:
+            new_nodes.append(n)
+            continue
+            
+        for m in matches:
+            text, url = m
+            sections = n.text.split(f"[{text}]({url})", 1)
+
+
+            if sections[0]: # checks if not empty
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+
+            new_nodes.append(TextNode(text, TextType.LINK, url))
+
+            if len(sections) > 1:
+                n.text = sections[1]
+
+        
+    return(new_nodes)
+
+
+def split_nodes_img(old_nodes):
+    new_nodes = []
+    for n in old_nodes:
+        matches = extract_md_images(n.text)
+        if len(matches) == 0:
+            new_nodes.append(n)
+            continue
+            
+        for m in matches:
+            text, url = m
+            sections = n.text.split(f"![{text}]({url})", 1)
+
+
+            if sections[0]: # checks if not empty
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+
+            new_nodes.append(TextNode(text, TextType.IMAGE, url))
+
+            if len(sections) > 1:
+                n.text = sections[1]
+
+        
+    return(new_nodes)
+
