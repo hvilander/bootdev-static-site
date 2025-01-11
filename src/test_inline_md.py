@@ -1,5 +1,5 @@
 import unittest
-from util import *
+from inline_md import *
 from textnode import TextNode, TextType
 
 
@@ -14,7 +14,7 @@ class TestUtil(unittest.TestCase):
         ]
 
 
-        act_lst = split_nodes_delim([input], '**', TextType.BOLD)
+        act_lst = split_nodes_delimiter([input], '**', TextType.BOLD)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -30,7 +30,7 @@ class TestUtil(unittest.TestCase):
             TextNode(" at the start", TextType.TEXT)
         ]
 
-        act_lst = split_nodes_delim([input], '**', TextType.BOLD)
+        act_lst = split_nodes_delimiter([input], '**', TextType.BOLD)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -46,7 +46,7 @@ class TestUtil(unittest.TestCase):
             TextNode("at the end", TextType.BOLD),
         ]
 
-        act_lst = split_nodes_delim([input], '**', TextType.BOLD)
+        act_lst = split_nodes_delimiter([input], '**', TextType.BOLD)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -62,7 +62,7 @@ class TestUtil(unittest.TestCase):
             TextNode("code block", TextType.CODE),
         ]
 
-        act_lst = split_nodes_delim([input], '`', TextType.CODE)
+        act_lst = split_nodes_delimiter([input], '`', TextType.CODE)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -78,7 +78,7 @@ class TestUtil(unittest.TestCase):
             TextNode("italic", TextType.ITALIC),
         ]
 
-        act_lst = split_nodes_delim([input], '*', TextType.ITALIC)
+        act_lst = split_nodes_delimiter([input], '*', TextType.ITALIC)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -94,7 +94,7 @@ class TestUtil(unittest.TestCase):
         input = TextNode(strn, TextType.TEXT)
 
         with self.assertRaises(ValueError):
-            split_nodes_delim([input], "**", TextType.TEXT)
+            split_nodes_delimiter([input], "**", TextType.TEXT)
 
 
 
@@ -102,7 +102,7 @@ class TestUtil(unittest.TestCase):
         text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
         expected = [("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")]
 
-        act = extract_md_links(text)
+        act = extract_markdown_links(text)
 
         self.assertEqual(act, expected)
 
@@ -110,7 +110,7 @@ class TestUtil(unittest.TestCase):
         text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
         expected =  [("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")]
 
-        act = extract_md_images(text)
+        act = extract_markdown_images(text)
 
         self.assertEqual(act, expected)
 
@@ -158,7 +158,7 @@ class TestUtil(unittest.TestCase):
              ),
          ]
 
-        act = split_nodes_img([node])
+        act = split_nodes_image([node])
         self.assertEqual(expected, act)
 
 
