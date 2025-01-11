@@ -14,7 +14,7 @@ class TestUtil(unittest.TestCase):
         ]
 
 
-        act_lst = split_nodes_delim([input], '**', None)
+        act_lst = split_nodes_delim([input], '**', TextType.BOLD)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -30,7 +30,7 @@ class TestUtil(unittest.TestCase):
             TextNode(" at the start", TextType.TEXT)
         ]
 
-        act_lst = split_nodes_delim([input], '**', TextType.TEXT)
+        act_lst = split_nodes_delim([input], '**', TextType.BOLD)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -46,7 +46,7 @@ class TestUtil(unittest.TestCase):
             TextNode("at the end", TextType.BOLD),
         ]
 
-        act_lst = split_nodes_delim([input], '**', None)
+        act_lst = split_nodes_delim([input], '**', TextType.BOLD)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -62,7 +62,7 @@ class TestUtil(unittest.TestCase):
             TextNode("code block", TextType.CODE),
         ]
 
-        act_lst = split_nodes_delim([input], '`', None)
+        act_lst = split_nodes_delim([input], '`', TextType.CODE)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -78,7 +78,7 @@ class TestUtil(unittest.TestCase):
             TextNode("italic", TextType.ITALIC),
         ]
 
-        act_lst = split_nodes_delim([input], '*', None)
+        act_lst = split_nodes_delim([input], '*', TextType.ITALIC)
         self.assertEqual(len(act_lst), len(expected))
 
         for i in range(0, len(expected)):
@@ -160,3 +160,25 @@ class TestUtil(unittest.TestCase):
 
         act = split_nodes_img([node])
         self.assertEqual(expected, act)
+
+
+
+    def test_text_to_textnodes(self):
+        input = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        expected = [
+            TextNode("This is ", TextType.TEXT),
+            TextNode("text", TextType.BOLD),
+            TextNode(" with an ", TextType.TEXT),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word and a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and an ", TextType.TEXT),
+            TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a ", TextType.TEXT),
+            TextNode("link", TextType.LINK, "https://boot.dev"),
+        ]
+
+        act = text_to_textnodes(input)
+        self.assertEqual(expected, act)
+
+
