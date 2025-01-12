@@ -78,6 +78,18 @@ def get_li_for_ul(block):
 
     return nodes
 
+def get_li_for_ol(block):
+    lines = block.split("\n")
+    nodes = []
+    for l in lines:
+        s = re.split(r"\d.\s", l)
+        nodes.append(HTMLNode('li', s[1]))
+
+    return nodes
+
+def get_block_quote(block):
+    return HTMLNode("blockquote", block)
+
 def block_to_html_node(block):
     type = block_to_block_type(block)
     match type:
@@ -92,6 +104,11 @@ def block_to_html_node(block):
         case BlockType.UL:
             children = get_li_for_ul(block)
             return HTMLNode("ul", None, children)
+        case BlockType.OL:
+            children = get_li_for_ol(block)
+            return HTMLNode("ol", None, children)
+        case BlockType.QUOTE:
+            return get_block_quote(block)
         case _:
             return HTMLNode("p", block)
 

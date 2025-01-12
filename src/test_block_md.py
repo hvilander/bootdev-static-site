@@ -103,6 +103,36 @@ class TestBlockMD(unittest.TestCase):
         string_actual = f"{actual}"
         self.assertEqual(string_expected, string_actual)
 
+    def test_md_to_html_ol(self):
+        document = "1. one\n2. two\n\np after ol"
+        expected_children = [
+            HTMLNode("ol", None, [
+                HTMLNode("li", "one"),
+                HTMLNode("li", "two"), 
+            ]),
+            HTMLNode("p", "p after ol")
+        ]
+
+        expected = HTMLNode("div", None, expected_children)
+        actual = markdown_to_html_node(document)
+        string_expected = f"{expected}"
+        string_actual = f"{actual}"
+        self.assertEqual(string_expected, string_actual)
+
+
+    def test_md_to_html_block_quote(self):
+        document = "> a block\n> quote\n\nand a p"
+        expected_children = [
+            HTMLNode("blockquote", "> a block\n> quote"),
+            HTMLNode("p", "and a p")
+        ]
+
+        expected = HTMLNode("div", None, expected_children)
+        actual = markdown_to_html_node(document)
+        string_expected = f"{expected}"
+        string_actual = f"{actual}"
+        self.assertEqual(string_expected, string_actual)
+
 
 
 
