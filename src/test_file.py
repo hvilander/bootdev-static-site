@@ -30,6 +30,15 @@ class TestFile(unittest.TestCase):
         generate_page(from_path, template_path, dest_path)
 
 
+    def test_recursive(self):
+        content_dir_path = "content"
+        dest_path = "public"
+        template_path = "./template.html"
+
+
+        generate_pages_recursive(content_dir_path, template_path, dest_path)
+
+
     
 
 
