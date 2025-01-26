@@ -1,5 +1,5 @@
 import unittest
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, to_html_node
 from htmlnode import HTMLNode
 
 class TestTextNode(unittest.TestCase):
@@ -28,34 +28,34 @@ class TestTextNode(unittest.TestCase):
     def test_to_leaf_node_text(self):
         t_node = TextNode("plain text", TextType.TEXT)
         expect = HTMLNode(None, "plain text")
-        self.assertEqual(expect, t_node.to_html_node())
+        self.assertEqual(expect, to_html_node(t_node))
 
     def test_to_leaf_node_bold(self):
         t_node = TextNode("bold text", TextType.BOLD)
         expect = HTMLNode("b", "bold text")
-        self.assertEqual(expect, t_node.to_html_node())
+        self.assertEqual(expect, to_html_node(t_node))
 
     def test_to_leaf_node_italic(self):
         t_node = TextNode("italic text", TextType.ITALIC)
         expect = HTMLNode("i", "italic text")
-        self.assertEqual(expect, t_node.to_html_node())
+        self.assertEqual(expect, to_html_node(t_node))
 
 
     def test_to_leaf_node_code(self):
         t_node = TextNode("code text", TextType.CODE)
         expect = HTMLNode("code", "code text")
-        self.assertEqual(expect, t_node.to_html_node())
+        self.assertEqual(expect, to_html_node(t_node))
 
 
     def test_to_leaf_node_image(self):
         t_node = TextNode("alt_text", TextType.IMAGE, "img:/url")
         expect = HTMLNode("img", "", None, {"src": "img:/url", "alt": "alt_text"})
-        self.assertEqual(expect, t_node.to_html_node())
+        self.assertEqual(expect, to_html_node(t_node))
 
     def test_to_leaf_node_link(self):
         t_node = TextNode("my_link", TextType.LINK, "url:/link" )
         expect = HTMLNode("a", "my_link", None, {"href": "url:/link"})
-        self.assertEqual(expect, t_node.to_html_node())
+        self.assertEqual(expect, to_html_node(t_node))
 
 
         

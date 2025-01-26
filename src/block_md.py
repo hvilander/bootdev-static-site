@@ -4,8 +4,17 @@ from enum import Enum
 from htmlnode import HTMLNode
 from parentnode import ParentNode
 from leafnode import LeafNode
+from inline_md import text_to_textnodes
+from textnode import to_html_node
 import re
 
+def text_to_children(text):
+    text_nodes = text_to_textnodes(text)
+    children = []
+    for text_node in text_nodes:
+        html_node = to_html_node(text_node)
+        children.append(html_node)
+    return children
 
 class BlockType(Enum):
     HEADING = "heading block"
@@ -76,7 +85,8 @@ def get_li_for_ul(block):
             s = l.split("- ")
         if l.startswith("* "):
             s = l.split("* ")
-        nodes.append(LeafNode('li', s[1].strip("\n")))
+        children = text_to_children(l[2:])
+        nodes.append(ParentNode('li', children))
 
     return nodes
 
@@ -84,14 +94,28 @@ def get_li_for_ol(block):
     lines = block.split("\n")
     nodes = []
     for l in lines:
-        s = re.split(r"\d.\s", l)
-        nodes.append(LeafNode('li', s[1]))
-
+        text = l[3:]
+        children = text_to_children(text)
+        nodes.append(ParentNode('li', children))
     return nodes
 
 def get_block_quote(block):
-    return LeafNode("blockquote", block)
+    lines = block.split("\n")
+    new_lines = []
+    for l in lines:
+        new_lines.append(l.lstrip(">").strip())
+        content = " ".join(new_lines)
+        children = text_to_children(content)
+    return ParentNode("blockquote", children)
 
+def paragraph_to_html_node(block):
+    lines = block.split("\n")
+    paragraph = " ".join(lines)
+    children = text_to_children(paragraph)
+    return ParentNode("p", children)
+
+
+## NEED TO FIX more things need to be parents
 def block_to_html_node(block):
     type = block_to_block_type(block)
     match type:
@@ -112,7 +136,7 @@ def block_to_html_node(block):
         case BlockType.QUOTE:
             return get_block_quote(block)
         case _:
-            return LeafNode("p", block)
+            return paragraph_to_html_node(block) 
 
 
 def markdown_to_html_node(document):
@@ -128,4 +152,5 @@ def markdown_to_html_node(document):
 
 
     return root_node
+
 
