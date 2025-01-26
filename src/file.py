@@ -1,4 +1,5 @@
 import re
+import os
 from block_md import *
 
 
@@ -26,7 +27,15 @@ def generate_page(from_path, template_path, dest_path):
     with open(template_path, "r") as template_file:
         template = template_file.read()
 
-
     html_node = markdown_to_html_node(md)
     html_string = html_node.to_html()
+    title = extract_title(md)
+    out = template.replace(' {{ Title }} ', title).replace("{{ Content }}", html_string)
 
+
+    directory = os.path.dirname(dest_path)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+
+    with open(dest_path, 'w') as file:
+        file.write(out)

@@ -121,9 +121,6 @@ def markdown_to_html_node(document):
     children = []
     for b in blocks:
         n = block_to_html_node(b)
-        print("\n\n")
-        print(n)
-        print("\n\n")
         children.append(n)
 
 
