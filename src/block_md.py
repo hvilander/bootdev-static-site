@@ -2,6 +2,8 @@
 
 from enum import Enum
 from htmlnode import HTMLNode
+from parentnode import ParentNode
+from leafnode import LeafNode
 import re
 
 
@@ -74,7 +76,7 @@ def get_li_for_ul(block):
             s = l.split("- ")
         if l.startswith("* "):
             s = l.split("* ")
-        nodes.append(HTMLNode('li', s[1].strip("\n")))
+        nodes.append(LeafNode('li', s[1].strip("\n")))
 
     return nodes
 
@@ -83,12 +85,12 @@ def get_li_for_ol(block):
     nodes = []
     for l in lines:
         s = re.split(r"\d.\s", l)
-        nodes.append(HTMLNode('li', s[1]))
+        nodes.append(LeafNode('li', s[1]))
 
     return nodes
 
 def get_block_quote(block):
-    return HTMLNode("blockquote", block)
+    return LeafNode("blockquote", block)
 
 def block_to_html_node(block):
     type = block_to_block_type(block)
@@ -96,32 +98,37 @@ def block_to_html_node(block):
         case BlockType.HEADING:
             tag = get_heading_lvl(block)
             s = block.split("# ") # TODO handle more than h1
-            return HTMLNode(tag, s[1])
+            return LeafNode(tag, s[1])
         case BlockType.CODE:
             s = block.split("```")
-            child = HTMLNode("code", s[1])
-            return HTMLNode("pre", None, [child])
+            child = LeafNode("code", s[1])
+            return ParentNode("pre", [child])
         case BlockType.UL:
             children = get_li_for_ul(block)
-            return HTMLNode("ul", None, children)
+            return ParentNode("ul", children)
         case BlockType.OL:
             children = get_li_for_ol(block)
-            return HTMLNode("ol", None, children)
+            return ParentNode("ol",  children)
         case BlockType.QUOTE:
             return get_block_quote(block)
         case _:
-            return HTMLNode("p", block)
+            return LeafNode("p", block)
 
 
 def markdown_to_html_node(document):
     blocks = markdown_to_blocks(document)
+
     children = []
     for b in blocks:
-        children.append(block_to_html_node(b))
+        n = block_to_html_node(b)
+        print("\n\n")
+        print(n)
+        print("\n\n")
+        children.append(n)
 
 
-    # HTMLNode(tag, value, children, props):
-    root_node = HTMLNode("div", None, children)
+    root_node = ParentNode("div", children, None)
+
 
     return root_node
 

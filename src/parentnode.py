@@ -4,15 +4,16 @@ class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
 
+    #def __repr__(self):
+       #return f"ParentNode({self.tag}, children: {self.children}, {self.props})"
+
 
     def to_html(self):
-
-
         if self.tag == None:
             raise ValueError("Parent has no tag")
 
         if self.children == None:
-            raise ValueError("Children requiered")
+            raise ValueError("Children required")
 
         start = f"<{self.tag}>"
         end = f"</{self.tag}>"
@@ -24,7 +25,6 @@ class ParentNode(HTMLNode):
 
         return start + middle + end
         
-
 
 
 

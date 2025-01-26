@@ -137,8 +137,9 @@ class TestBlockMD(unittest.TestCase):
 
 
 
+    # Something is wrong with UL parsing
     def est_md_to_html_node(self):
-        document = "# heading 1\n- ul one\n* ul two\n> start\n> mid\n> end of quote\n```code\nblock\n```\n\n\n1. ol one\n2. ol2\na paragraph\n\n## heading 2\n\n"
+        document = "# heading 1\n- ul one\n* ul two\n> start\n> mid\n> end of quote\n```code\nblock\n```\n\n\n1. ol one\n2. ol2\n\na paragraph\n\n## heading 2\n\n"
 
         expected_children = [
             HTMLNode("h1", "heading 1"),
@@ -152,5 +153,9 @@ class TestBlockMD(unittest.TestCase):
 
         expected = HTMLNode("div", None, expected_children)
         actual = markdown_to_html_node(document)
+        print('\n\n')
+        print('acutal children:\n')
+        print(actual.children)
+        print('\n\n')
         self.assertEqual(len(expected.children), len(actual.children))
         self.assertEqual(expected, actual)
